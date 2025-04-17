@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Precision Clock</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;700&display=swap');
+        
+        :root {
+            --primary: #00f7ff;
+            --secondary: #c815c2;
+            --accent: #f7ff00;
+            --bg-dark: #0a0a12;
+            --bg-darker: #050508;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--bg-darker);
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+        
+        .clock-container {
+            position: relative;
+            width: 95%;
+            max-width: 900px;
+            height: 500px;
+            border-radius: 20px;
+            background: linear-gradient(145deg, var(--bg-dark), var(--bg-darker));
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .clock-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            z-index: -2;
+            border-radius: 22px;
+            animation: borderGlow 8s linear infinite;
+        }
+        
+        .clock-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            z-index: -1;
+            border-radius: 20px;
+            opacity: 0.05;
+            animation: borderGlow 8s linear infinite;
+        }
+        
+        @keyframes borderGlow {
+            0% { filter: blur(5px); opacity: 0.7; }
+            50% { filter: blur(10px); opacity: 0.3; }
+            100% { filter: blur(5px); opacity: 0.7; }
+        }
+        
+        .digital-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.3;
+        }
+        
+        .glow-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.4;
+            z-index: -1;
+        }
+        
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--primary), transparent 70%);
+            top: -100px;
+            left: -100px;
+            animation: float 15s ease-in-out infinite;
+        }
+        
+        .circle-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--secondary), transparent 70%);
+            bottom: -150px;
+            right: -150px;
+            animation: float 18s ease-in-out infinite reverse;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(20px, 20px); }
+            50% { transform: translate(0, 40px); }
+            75% { transform: translate(-20px, 20px); }
+        }
+        
+        .date-display {
+            font-size: 1.8rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+        
+        .time-display {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 20px;
+        }
+        
+        .time {
+            font-size: 5.5rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            color: white;
+            text-shadow: 0 0 15px var(--primary);
+            position: relative;
+        }
+        
+        .time::after {
+            content: attr(data-desisecond);
+            position: absolute;
+            right: -25px;
+            bottom: 10px;
+            font-size: 2rem;
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent);
+        }
+        
+        .ampm {
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--secondary);
+            text-shadow: 0 0 10px var(--secondary);
+            margin-left: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .precision-display {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .precision-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px 25px;
+            margin: 0 10px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 150px;
+            text-align: center;
+        }
+        
+        .precision-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        
+        .precision-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .milliseconds .precision-value {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+        
+        .desiseconds .precision-value {
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent);
+        }
+        
+        .microseconds .precision-value {
+            color: var(--secondary);
+            text-shadow: 0 0 10px var(--secondary);
+        }
+        
+        .divider {
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(to right, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            margin: 25px 0;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .clock-container {
+                height: 450px;
+                padding: 20px;
+            }
+            
+            .date-display {
+                font-size: 1.4rem;
+                margin-bottom: 20px;
+            }
+            
+            .time {
+                font-size: 3.5rem;
+                letter-spacing: 3px;
+            }
+            
+            .time::after {
+                font-size: 1.5rem;
+                right: -15px;
+                bottom: 5px;
+            }
+            
+            .ampm {
+                font-size: 1.5rem;
+                margin-bottom: 8px;
+            }
+            
+            .precision-box {
+                padding: 10px 15px;
+                min-width: 120px;
+            }
+            
+            .precision-value {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="clock-container">
+        <div class="digital-grid"></div>
+        <div class="glow-circle circle-1"></div>
+        <div class="glow-circle circle-2"></div>
+        
+        <div class="date-display" id="date"></div>
+        
+        <div class="time-display">
+            <div class="time" id="time" data-desisecond="0"></div>
+            <div class="ampm" id="ampm"></div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="precision-display">
+            <div class="precision-box desiseconds">
+                <div class="precision-label">DESISECONDS</div>
+                <div class="precision-value" id="desiseconds">0</div>
+            </div>
+            <div class="precision-box milliseconds">
+                <div class="precision-label">MILLISECONDS</div>
+                <div class="precision-value" id="milliseconds">000</div>
+            </div>
+            <div class="precision-box microseconds">
+                <div class="precision-label">MICROSECONDS</div>
+                <div class="precision-value" id="microseconds">000</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // High precision timer using performance.now()
+        let lastTime = performance.now();
+        let desisecondCount = 0;
+        
+        function updateClock() {
+            const now = new Date();
+            const perfNow = performance.now();
+            
+            // Calculate desiseconds (1/10th of a second)
+            const elapsed = perfNow - lastTime;
+            if (elapsed >= 100) {
+                desisecondCount = (desisecondCount + 1) % 10;
+                lastTime = perfNow;
+            }
+            
+            // Format date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateStr = now.toLocaleDateString(undefined, options).toUpperCase();
+            document.getElementById('date').textContent = dateStr;
+            
+            // Format time
+            let hours = now.getHours();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // Convert 0 to 12
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            
+            document.getElementById('time').textContent = `${hours}:${minutes}:${seconds}`;
+            document.getElementById('time').setAttribute('data-desisecond', desisecondCount);
+            document.getElementById('ampm').textContent = ampm;
+            
+            // Format precision values
+            const milliseconds = now.getMilliseconds().toString().padStart(3, '0');
+            const microseconds = Math.floor((perfNow % 1) * 1000).toString().padStart(3, '0');
+            
+            document.getElementById('desiseconds').textContent = desisecondCount;
+            document.getElementById('milliseconds').textContent = milliseconds;
+            document.getElementById('microseconds').textContent = microseconds;
+            
+            // Request next frame
+            requestAnimationFrame(updateClock);
+        }
+        
+        // Start the clock
+        updateClock();
+        
+        // Mouse move effect
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            // Tilt effect
+            const tiltX = (y - 0.5) * 10;
+            const tiltY = (0.5 - x) * 10;
+            document.querySelector('.clock-container').style.transform = `
+                rotateX(${tiltX}deg)
+                rotateY(${tiltY}deg)
+            `;
+            
+            // Move glow circles
+            document.querySelector('.circle-1').style.transform = `translate(${x * 40 - 100}px, ${y * 40 - 100}px)`;
+            document.querySelector('.circle-2').style.transform = `translate(${x * -60 + 150}px, ${y * -60 + 150}px)`;
+        });
+    </script>
+</body>
+</html>
