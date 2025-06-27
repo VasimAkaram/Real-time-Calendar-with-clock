@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SubjectLinePro – Email Subject Line Analyzer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>SubjectLinePro</h1>
+      <p>Smart Analyzer for Email Subject Line Performance</p>
+      <button id="darkModeToggle" title="Toggle dark mode">🌙</button>
+    </header>
+    <main>
+      <section class="input-section">
+        <label for="subjectLines">Paste up to 10 subject lines (one per line):</label>
+        <textarea id="subjectLines" rows="10" maxlength="1000" placeholder="Enter subject lines here..."></textarea>
+        <div class="actions">
+          <button id="analyzeBtn">Analyze</button>
+          <button id="clearBtn" class="secondary">Clear All</button>
+        </div>
+      </section>
+      <section class="results-section" id="resultsSection" style="display:none;">
+        <h2>Analysis Results</h2>
+        <div class="table-responsive">
+          <table id="resultsTable">
+            <thead>
+              <tr>
+                <th>Subject Line</th>
+                <th>Length</th>
+                <th>Spam Score</th>
+                <th>Emotion Score</th>
+                <th>Verdict</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <button id="exportBtn" class="secondary">Export as CSV</button>
+      </section>
+    </main>
+    <footer>
+      <small>Made for marketers, solopreneurs, and small business owners.</small>
+    </footer>
+  </div>
+  <script src="spamWords.js"></script>
+  <script src="emotionWords.js"></script>
+  <script src="app.js"></script>
+</body>
+</html> 

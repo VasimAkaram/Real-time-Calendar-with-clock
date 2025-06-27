@@ -1,0 +1,4 @@
+// List of common spammy words/phrases
+window.spamWords = [
+  "free", "buy now", "urgent", "limited time", "act now", "winner", "guaranteed", "no cost", "risk free", "exclusive deal", "congratulations", "click here", "apply now", "don't delete", "order now", "special promotion", "this won't last", "save big", "lowest price", "bargain", "cash bonus", "earn extra cash", "get paid", "increase sales", "miracle", "promise you", "satisfaction guaranteed", "trial", "unlimited", "urgent reply", "win", "won", "prize", "credit", "cheap", "clearance", "deal", "discount", "double your", "extra income", "fast cash", "gift", "great offer", "income", "investment", "lose weight", "money", "offer expires", "one time", "pre-approved", "profit", "refinance", "remove", "sale", "save up to", "special offer", "urgent", "while supplies last"
+]; 
